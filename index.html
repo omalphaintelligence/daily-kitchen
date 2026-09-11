@@ -3,225 +3,264 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0E1A">
 <title>The Daily Kitchen</title>
-<meta name="description" content="A vegetarian kitchen journal: daily menus, pantry-aware shopping lists, and fully detailed recipes.">
+<meta name="description" content="Daily veg menus, pantry-aware shopping lists and fully detailed recipes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,400&family=Spectral:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#FBF6EF; --ink:#221E1A; --soft:#6B6259;
-  --pom:#9E2B2B; --olive:#55632C; --saffron:#C08114; --slate:#2E4057;
-  --rule:rgba(34,30,26,.22); --hair:rgba(34,30,26,.12);
+  --bg:#0B0E1A; --panel:#151A2E; --panel2:#1B2138; --line:rgba(255,255,255,.09);
+  --tx:#F2F3FF; --mut:#98A1C6;
+  --mango:#FFC145; --chili:#FF5A5F; --mint:#24D6A5; --grape:#8B6BFF; --sky:#3BA9FF;
+  --r:20px;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{
-  margin:0;background:var(--paper);color:var(--ink);
-  font-family:Spectral,Georgia,serif;font-size:17px;line-height:1.72;font-weight:300;
-  -webkit-font-smoothing:antialiased;
-}
-.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
-h1,h2,h3,.disp{font-family:"Bodoni Moda",Didot,serif;font-weight:700;line-height:1.06;margin:0;letter-spacing:-.01em}
-a{color:var(--pom)}
+body{margin:0;background:var(--bg);color:var(--tx);
+  font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:-20% -10%;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(38vw 38vw at 8% 2%, rgba(255,193,69,.20), transparent 60%),
+    radial-gradient(42vw 42vw at 96% 12%, rgba(139,107,255,.22), transparent 62%),
+    radial-gradient(46vw 46vw at 42% 104%, rgba(36,214,165,.16), transparent 60%);
+  animation:drift 26s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate3d(-3%,2%,0) scale(1.08)}}
+h1,h2,h3,.disp{font-family:Outfit,system-ui,sans-serif;font-weight:800;line-height:1.08;margin:0;letter-spacing:-.02em}
+a{color:var(--mango)}
 button{font-family:inherit}
-hr.rule{border:none;border-top:1px solid var(--rule);margin:0}
-.dbl{border-top:3px double var(--rule);margin:0}
+.wrap{max-width:1160px;margin:0 auto;padding:0 18px}
 
-/* masthead */
-.masthead{padding:34px 0 14px;text-align:center}
-.masthead h1{font-size:clamp(42px,8vw,88px);font-weight:900;letter-spacing:-.02em}
-.issue{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
-  font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);
-  padding:12px 0;border-top:1px solid var(--rule);border-bottom:3px double var(--rule);margin-top:16px}
+/* top bar */
+.bar{position:sticky;top:0;z-index:40;backdrop-filter:blur(14px);
+  background:rgba(11,14,26,.78);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:14px;padding:12px 18px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:11px;font-family:Outfit;font-weight:900;font-size:19px;letter-spacing:-.02em}
+.logo i{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;font-style:normal;font-size:18px;
+  background:linear-gradient(140deg,var(--mango),var(--chili));box-shadow:0 6px 18px -6px var(--chili)}
+.bar .date{font-size:13px;color:var(--mut)}
+.spacer{margin-left:auto}
+.pill{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);
+  border-radius:999px;padding:5px 6px 5px 14px;font-size:13px;color:var(--mut)}
+.step{display:flex;align-items:center;gap:2px}
+.step button{width:30px;height:30px;border-radius:50%;border:none;cursor:pointer;font-size:17px;font-weight:700;
+  background:var(--panel2);color:var(--tx);transition:transform .15s,background .15s}
+.step button:hover{background:var(--mango);color:#10121E;transform:scale(1.08)}
+.step span{min-width:34px;text-align:center;font-family:Outfit;font-weight:800;font-size:16px;color:var(--tx)}
+select{font:inherit;font-size:13px;color:var(--tx);background:var(--panel);border:1px solid var(--line);
+  border-radius:999px;padding:8px 14px;cursor:pointer}
+select:focus-visible,button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--mango);outline-offset:2px}
+.ghost{border:1px solid var(--line);background:var(--panel);color:var(--tx);border-radius:999px;
+  padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
+.ghost:hover{background:var(--panel2);transform:translateY(-1px)}
 
-/* controls */
-.controls{display:flex;gap:26px;flex-wrap:wrap;align-items:center;padding:16px 0;border-bottom:1px solid var(--rule)}
-.ctl{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--soft)}
-.step{display:flex;align-items:center;border:1px solid var(--ink);border-radius:2px;overflow:hidden}
-.step button{border:none;background:transparent;cursor:pointer;font-size:19px;line-height:1;padding:6px 13px;color:var(--ink)}
-.step button:hover{background:var(--ink);color:var(--paper)}
-.step span{padding:6px 12px;font-family:"Bodoni Moda";font-weight:700;font-size:17px;border-left:1px solid var(--hair);border-right:1px solid var(--hair);min-width:46px;text-align:center}
-select,input[type=text],input[type=number],input[type=search]{
-  font:inherit;font-size:15px;background:transparent;color:var(--ink);
-  border:none;border-bottom:1px solid var(--ink);padding:5px 4px;border-radius:0}
-select:focus,input:focus{outline:2px solid var(--saffron);outline-offset:2px}
-
-/* today spread */
-.spread{display:grid;grid-template-columns:minmax(280px,.85fr) 1.15fr;gap:46px;padding:40px 0 34px;align-items:start}
-.plateBox{position:relative}
-.plate{width:100%;aspect-ratio:1;border-radius:50%;overflow:hidden;display:block;box-shadow:0 20px 40px -26px rgba(34,30,26,.75)}
+/* hero */
+.hero{display:grid;grid-template-columns:300px 1fr;gap:34px;align-items:center;
+  margin:26px 0 10px;padding:30px;border-radius:30px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(139,107,255,.22),rgba(59,169,255,.10) 40%,rgba(255,193,69,.16));
+  border:1px solid var(--line)}
+.hero::after{content:"";position:absolute;width:420px;height:420px;right:-140px;top:-160px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,90,95,.35),transparent 65%);filter:blur(6px)}
+.plateBox{position:relative;z-index:1}
+.plate{width:100%;aspect-ratio:1;border-radius:50%;overflow:hidden;display:block;
+  box-shadow:0 30px 60px -20px rgba(0,0,0,.75),0 0 0 10px rgba(255,255,255,.05);
+  animation:spin 90s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 .plate img{width:100%;height:100%;object-fit:cover;display:block}
-.caption{font-size:13px;font-style:italic;color:var(--soft);text-align:center;margin-top:14px;line-height:1.5}
-.leadin{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--pom);margin-bottom:10px}
-.spread h2{font-size:clamp(30px,4.4vw,48px);margin-bottom:6px}
-.deck{font-size:19px;font-style:italic;color:var(--soft);margin:0 0 26px;max-width:56ch}
-.meals{display:grid;gap:0}
-.meal{padding:18px 0;border-top:1px solid var(--rule);display:grid;grid-template-columns:112px 1fr auto;gap:18px;align-items:baseline}
-.meal:last-child{border-bottom:1px solid var(--rule)}
-.meal .when{font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--soft);line-height:1.5}
-.meal .dishes{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
-.dish{all:unset;cursor:pointer;font-family:"Bodoni Moda";font-weight:700;font-size:23px;border-bottom:1px solid transparent}
-.dish:hover{border-bottom-color:var(--pom);color:var(--pom)}
-.dish:focus-visible{outline:2px solid var(--saffron);outline-offset:3px}
-.withs{font-size:15px;color:var(--soft);font-style:italic;width:100%}
-.swapbtn{all:unset;cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);border-bottom:1px solid var(--hair)}
-.swapbtn:hover{color:var(--pom);border-bottom-color:var(--pom)}
+.caption{font-size:13px;color:var(--mut);text-align:center;margin:14px 0 0}
+.heroTx{position:relative;z-index:1}
+.leadin{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:#10121E;background:var(--mango);padding:5px 12px;border-radius:999px;margin-bottom:14px}
+.hero h2{font-size:clamp(30px,5.4vw,52px);font-weight:900}
+.deck{color:var(--mut);font-size:16px;margin:10px 0 22px;max-width:60ch}
+.meals{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+.meal{background:rgba(11,14,26,.55);border:1px solid var(--line);border-radius:var(--r);padding:16px;
+  position:relative;overflow:hidden;transition:transform .18s,border-color .18s}
+.meal:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.2)}
+.meal::before{content:"";position:absolute;inset:0 0 auto 0;height:4px}
+.meal:nth-child(1)::before{background:linear-gradient(90deg,var(--mango),var(--chili))}
+.meal:nth-child(2)::before{background:linear-gradient(90deg,var(--mint),var(--sky))}
+.meal:nth-child(3)::before{background:linear-gradient(90deg,var(--grape),var(--chili))}
+.meal .when{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);margin-bottom:10px}
+.dishes{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline}
+.dish{all:unset;cursor:pointer;font-family:Outfit;font-weight:700;font-size:20px;line-height:1.2}
+.dish:hover{color:var(--mango)}
+.dish:focus-visible{outline:2px solid var(--mango);outline-offset:3px;border-radius:6px}
+.withs{width:100%;font-size:13px;color:var(--mut)}
+.swapbtn{all:unset;cursor:pointer;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--sky);margin-top:10px;display:inline-block}
+.swapbtn:hover{color:var(--mango)}
 
-/* generic section */
-section.blk{padding:44px 0}
-.blkhead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;
-  border-bottom:3px double var(--rule);padding-bottom:12px;margin-bottom:26px}
-.blkhead h2{font-size:clamp(26px,3.6vw,38px)}
-.blkhead p{margin:4px 0 0;font-size:15px;font-style:italic;color:var(--soft);max-width:52ch}
+/* sections */
+section.blk{margin:44px 0}
+.blkhead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.blkhead h2{font-size:clamp(24px,3.6vw,34px);font-weight:900}
+.blkhead p{margin:6px 0 0;color:var(--mut);font-size:14.5px;max-width:60ch}
+.badge{font-size:12px;font-weight:700;padding:6px 13px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--mango)}
+.b-vrat{color:var(--mint)} .b-tyohar{color:var(--chili)} .b-mehman{color:var(--sky)}
 
 /* market */
-.market{display:grid;grid-template-columns:1.3fr .7fr;gap:44px;align-items:start}
-.buycols{columns:2;column-gap:34px}
+.market{display:grid;grid-template-columns:1.35fr .65fr;gap:20px;align-items:start}
+.card-pane{background:var(--panel);border:1px solid var(--line);border-radius:26px;padding:24px}
+.buycols{columns:2;column-gap:26px}
 @media(max-width:900px){.buycols{columns:1}}
-.grp{break-inside:avoid;margin-bottom:22px}
-.grp h4{font-family:"Bodoni Moda";font-size:15px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 8px;padding-bottom:5px;border-bottom:1px solid var(--rule)}
-.grp ul{list-style:none;margin:0;padding:0;font-size:15.5px}
-.grp li{display:flex;gap:9px;padding:3px 0;align-items:baseline}
-.grp li .q{margin-left:auto;color:var(--soft);font-variant-numeric:tabular-nums;white-space:nowrap}
-.grp input{accent-color:var(--pom)}
-.grp input:checked ~ label,.grp input:checked ~ .q{opacity:.4;text-decoration:line-through}
-.have{font-size:14px;color:var(--olive)}
-.have li{padding:2px 0}
-.pantry{border:1px solid var(--rule);padding:20px;background:rgba(255,255,255,.5)}
-.pantry h3{font-size:22px;margin-bottom:4px}
-.pantry .note{font-size:14px;font-style:italic;color:var(--soft);margin:0 0 14px}
-.prow{display:flex;gap:8px;align-items:baseline;font-size:15px;padding:4px 0;border-bottom:1px dotted var(--hair)}
-.prow .pq{margin-left:auto;color:var(--soft);font-variant-numeric:tabular-nums}
-.prow button{all:unset;cursor:pointer;color:var(--pom);font-size:18px;line-height:1;padding:0 3px}
-.padd{display:grid;grid-template-columns:1fr 68px 74px auto;gap:8px;margin-top:14px;align-items:end}
-.btn{cursor:pointer;font-family:Spectral;font-size:14px;letter-spacing:.08em;text-transform:uppercase;
-  background:transparent;border:1px solid var(--ink);color:var(--ink);padding:8px 16px;border-radius:2px}
-.btn:hover{background:var(--ink);color:var(--paper)}
-.btn.pom{border-color:var(--pom);color:var(--pom)}
-.btn.pom:hover{background:var(--pom);color:var(--paper)}
-.btn.sm{padding:5px 10px;font-size:12px}
-.tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.grp{break-inside:avoid;margin-bottom:20px}
+.grp h4{font-family:Outfit;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--mango);margin:0 0 9px}
+.grp ul{list-style:none;margin:0;padding:0}
+.grp li{display:flex;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:14.5px}
+.grp li .q{margin-left:auto;color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap;font-size:13.5px}
+.grp input[type=checkbox]{width:18px;height:18px;accent-color:var(--mint);flex:none;cursor:pointer}
+.grp input:checked ~ label,.grp input:checked ~ .q{opacity:.35;text-decoration:line-through}
+.have h4{color:var(--mint)}
+.have li{opacity:.8;font-size:13.5px}
+.pantry h3{font-family:Outfit;font-size:20px;margin-bottom:4px}
+.note{color:var(--mut);font-size:13.5px;margin:0 0 16px}
+.prow{display:flex;gap:10px;align-items:center;font-size:14.5px;padding:8px 12px;margin-bottom:6px;
+  background:var(--panel2);border-radius:12px}
+.prow .pq{margin-left:auto;color:var(--mut);font-size:13px;font-variant-numeric:tabular-nums}
+.prow button{all:unset;cursor:pointer;color:var(--chili);font-size:19px;line-height:1;padding:0 2px}
+.padd{display:grid;grid-template-columns:1fr 62px 64px;gap:8px;margin-top:14px}
+input[type=text],input[type=number],input[type=search]{font:inherit;font-size:14px;color:var(--tx);
+  background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%}
+input::placeholder{color:#6C77A0}
+.btn{cursor:pointer;border:none;border-radius:999px;padding:11px 20px;font-size:14px;font-weight:700;
+  background:var(--panel2);color:var(--tx);transition:.16s}
+.btn:hover{transform:translateY(-2px)}
+.btn.grad{background:linear-gradient(120deg,var(--mango),var(--chili));color:#12131F;
+  box-shadow:0 12px 26px -12px var(--chili)}
+.btn.mint{background:linear-gradient(120deg,var(--mint),var(--sky));color:#0C1220}
+.btn.sm{padding:8px 15px;font-size:13px}
+.padd .btn{grid-column:1/-1;margin-top:2px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
 
-/* plan */
-.plan{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:0 34px}
-.pday{padding:18px 0;border-top:1px solid var(--rule)}
-.pday.now{border-top:3px solid var(--pom)}
-.pdh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
-.pdh .d{font-family:"Bodoni Moda";font-weight:700;font-size:20px}
-.pdh .n{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)}
-.pslot{display:flex;gap:8px;align-items:baseline;font-size:15px;padding:3px 0}
-.pslot .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--soft);width:22px;flex:none;padding-top:3px}
-.pslot .val{flex:1}
-.pslot .val button{all:unset;cursor:pointer;border-bottom:1px dotted var(--hair)}
-.pslot .val button:hover{color:var(--pom);border-bottom-color:var(--pom)}
-.pfoot{display:flex;gap:12px;align-items:center;margin-top:10px;font-size:12.5px;color:var(--soft);flex-wrap:wrap}
-.pfoot label{display:flex;gap:6px;align-items:center;cursor:pointer}
-.pfoot select{font-size:12.5px;border-bottom-color:var(--hair);text-transform:uppercase;letter-spacing:.08em}
-.badge{font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border:1px solid currentColor;border-radius:2px}
-.b-vrat{color:var(--olive)} .b-tyohar{color:var(--pom)} .b-mehman{color:var(--slate)}
+/* plan rail */
+.plan{display:flex;gap:14px;overflow-x:auto;padding:4px 4px 16px;scroll-snap-type:x mandatory}
+.plan::-webkit-scrollbar{height:7px}
+.plan::-webkit-scrollbar-thumb{background:var(--panel2);border-radius:9px}
+.pday{flex:0 0 250px;scroll-snap-align:start;background:var(--panel);border:1px solid var(--line);
+  border-radius:22px;padding:16px;transition:transform .18s}
+.pday:hover{transform:translateY(-3px)}
+.pday.now{background:linear-gradient(165deg,rgba(255,193,69,.18),var(--panel));border-color:rgba(255,193,69,.45)}
+.pdh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+.pdh .d{font-family:Outfit;font-weight:800;font-size:18px}
+.pdh .n{font-size:11px;color:var(--mut)}
+.pslot{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;padding:6px 0;border-top:1px solid rgba(255,255,255,.05)}
+.pslot .lbl{flex:none;width:22px;height:22px;border-radius:8px;display:grid;place-items:center;
+  font-size:10px;font-weight:800;background:var(--panel2);color:var(--mango)}
+.pslot .val{flex:1;color:var(--mut)}
+.pslot .val button{all:unset;cursor:pointer;color:var(--tx)}
+.pslot .val button:hover{color:var(--mango)}
+.pfoot{margin-top:12px;display:flex;flex-direction:column;gap:8px;font-size:12.5px;color:var(--mut)}
+.pfoot select{width:100%;font-size:12.5px;padding:7px 12px}
+.pfoot label{display:flex;gap:8px;align-items:center;cursor:pointer}
+.pfoot input[type=checkbox]{accent-color:var(--mint);width:15px;height:15px}
 
 /* index */
-.filters{display:flex;gap:14px;flex-wrap:wrap;align-items:baseline;margin-bottom:22px}
-.fchip{all:unset;cursor:pointer;font-size:14px;letter-spacing:.06em;color:var(--soft);border-bottom:1px solid transparent;padding-bottom:2px}
-.fchip[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--pom)}
-.fchip:focus-visible{outline:2px solid var(--saffron);outline-offset:3px}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:30px 26px}
-.card{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:9px}
-.card .thumb{width:100%;aspect-ratio:1;border-radius:50%;overflow:hidden;transition:transform .25s}
-.card:hover .thumb{transform:scale(1.03)}
-.card:hover .cn{color:var(--pom)}
-.card:focus-visible{outline:2px solid var(--saffron);outline-offset:4px}
-.cn{font-family:"Bodoni Moda";font-weight:700;font-size:20px;line-height:1.15}
-.cm{font-size:13px;color:var(--soft);font-style:italic}
-.empty{grid-column:1/-1;padding:30px 0;color:var(--soft);font-style:italic}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.fchip{cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--mut);
+  border-radius:999px;padding:8px 16px;font-size:13.5px;font-weight:600;transition:.15s}
+.fchip:hover{color:var(--tx);transform:translateY(-1px)}
+.fchip[aria-pressed="true"]{background:linear-gradient(120deg,var(--mango),var(--chili));color:#12131F;border-color:transparent}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:18px}
+.card{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:22px;
+  background:var(--panel);border:1px solid var(--line);transition:transform .18s,border-color .18s,background .18s}
+.card:hover{transform:translateY(-5px);border-color:rgba(255,193,69,.5);background:var(--panel2)}
+.card:focus-visible{outline:2px solid var(--mango);outline-offset:3px}
+.card .thumb{width:100%;aspect-ratio:1;border-radius:18px;overflow:hidden;display:block}
+.card .thumb img,.card .thumb svg{width:100%;height:100%;object-fit:cover;display:block}
+.cn{font-family:Outfit;font-weight:700;font-size:17px;line-height:1.2}
+.cm{font-size:12.5px;color:var(--mut)}
+.empty{grid-column:1/-1;padding:26px;text-align:center;color:var(--mut);border:1px dashed var(--line);border-radius:20px}
 
 /* dialogs */
-dialog{border:none;padding:0;background:var(--paper);color:var(--ink);max-width:760px;width:calc(100% - 26px);
-  border-radius:2px;box-shadow:0 30px 80px -20px rgba(34,30,26,.55)}
-dialog::backdrop{background:rgba(34,30,26,.66)}
-.rtop{display:grid;grid-template-columns:150px 1fr;gap:24px;padding:28px 32px 22px;border-bottom:3px double var(--rule);align-items:center}
-.rtop .thumb{width:150px;aspect-ratio:1;border-radius:50%;overflow:hidden}
-.rtop h3{font-size:clamp(28px,5vw,42px)}
-.rtop .rm{font-size:13.5px;color:var(--soft);font-style:italic;margin-top:6px}
-.rbody{padding:26px 32px 30px;max-height:60vh;overflow:auto}
-.rbody h4{font-family:"Bodoni Moda";font-size:14px;letter-spacing:.14em;text-transform:uppercase;margin:26px 0 10px}
+dialog{border:none;padding:0;background:var(--panel);color:var(--tx);max-width:720px;width:calc(100% - 22px);
+  border-radius:26px;box-shadow:0 40px 90px -20px #000;border:1px solid var(--line)}
+dialog::backdrop{background:rgba(6,8,16,.78);backdrop-filter:blur(4px)}
+dialog[open]{animation:rise .24s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes rise{from{transform:translateY(18px) scale(.97);opacity:0}}
+.rtop{display:grid;grid-template-columns:120px 1fr;gap:18px;padding:22px;align-items:center;
+  background:linear-gradient(135deg,rgba(139,107,255,.25),rgba(255,193,69,.16));border-bottom:1px solid var(--line)}
+.rtop .thumb{width:120px;aspect-ratio:1;border-radius:50%;overflow:hidden;box-shadow:0 16px 34px -14px #000}
+.rtop .thumb img,.rtop .thumb svg{width:100%;height:100%;object-fit:cover;display:block}
+.rtop h3{font-size:clamp(24px,5vw,36px);font-weight:900}
+.rtop .rm{font-size:13px;color:var(--mut);margin-top:6px}
+.rbody{padding:22px;max-height:58vh;overflow:auto}
+.rbody h4{font-family:Outfit;font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--mango);margin:24px 0 10px}
 .rbody h4:first-child{margin-top:0}
-.ing{width:100%;border-collapse:collapse;font-size:15.5px}
-.ing td{padding:6px 0;border-bottom:1px dotted var(--hair);vertical-align:top}
-.ing td:last-child{text-align:right;white-space:nowrap;color:var(--soft);font-variant-numeric:tabular-nums;padding-left:18px}
-.ing tr.own td{color:var(--olive);opacity:.85}
+.ing{width:100%;border-collapse:collapse;font-size:14.5px}
+.ing td{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.ing td:last-child{text-align:right;color:var(--mut);white-space:nowrap;font-variant-numeric:tabular-nums}
+.ing tr.own td{color:var(--mint)}
 ol.steps{margin:0;padding:0;list-style:none;counter-reset:s}
-ol.steps li{counter-increment:s;position:relative;padding:0 0 18px 44px}
-ol.steps li::before{content:counter(s);position:absolute;left:0;top:2px;font-family:"Bodoni Moda";font-weight:700;
-  font-size:26px;color:var(--pom);line-height:1}
-ol.steps li b{font-weight:600;color:var(--pom)}
-.tips{border-left:2px solid var(--saffron);padding:4px 0 4px 18px;font-size:15px;font-style:italic;color:var(--soft)}
-.tips ul{margin:0;padding-left:16px}
-.refs{margin-top:22px;padding-top:14px;border-top:1px solid var(--hair);font-size:13.5px;color:var(--soft)}
-.dfoot{position:sticky;bottom:0;background:var(--paper);border-top:1px solid var(--rule);padding:14px 32px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
-.swaplist{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;padding:24px 32px;max-height:58vh;overflow:auto}
-.swaplist button{all:unset;cursor:pointer;padding:9px 12px;border:1px solid var(--hair);font-size:15px}
-.swaplist button:hover{border-color:var(--pom);color:var(--pom)}
-.dhead{padding:22px 32px 16px;border-bottom:1px solid var(--rule)}
-.dhead h3{font-size:26px}
-.dhead p{margin:4px 0 0;font-size:14px;font-style:italic;color:var(--soft)}
+ol.steps li{counter-increment:s;position:relative;padding:0 0 18px 46px;font-size:15.5px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:11px;
+  display:grid;place-items:center;font-family:Outfit;font-weight:800;font-size:15px;color:#12131F;
+  background:linear-gradient(140deg,var(--mango),var(--chili))}
+ol.steps li b{color:var(--mango);font-weight:700}
+.sc{border-bottom:1px dashed var(--mint);color:var(--mint);white-space:nowrap}
+.tips{background:var(--panel2);border-radius:16px;padding:14px 16px;font-size:14.5px;color:var(--mut)}
+.tips ul{margin:0;padding-left:18px}
+.tips li{margin:5px 0}
+.refs{margin-top:20px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--mut)}
+.dfoot{position:sticky;bottom:0;background:var(--panel);border-top:1px solid var(--line);
+  padding:14px 22px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.dhead{padding:22px 22px 16px;border-bottom:1px solid var(--line)}
+.dhead h3{font-size:22px}
+.dhead p{margin:6px 0 0;color:var(--mut);font-size:13.5px}
+.swaplist{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:9px;padding:20px 22px;max-height:56vh;overflow:auto}
+.swaplist button{all:unset;cursor:pointer;padding:11px 14px;border-radius:14px;background:var(--panel2);font-size:14px}
+.swaplist button:hover{background:linear-gradient(120deg,var(--mango),var(--chili));color:#12131F}
 
-footer{padding:40px 0 60px;border-top:3px double var(--rule);font-size:14px;color:var(--soft);font-style:italic}
+footer{margin:50px 0 46px;padding-top:22px;border-top:1px solid var(--line);color:var(--mut);font-size:13.5px}
+code{background:var(--panel2);padding:2px 7px;border-radius:7px;font-size:12.5px}
 
 @media(max-width:860px){
-  .spread{grid-template-columns:1fr;gap:28px;padding-top:26px}
-  .plateBox{max-width:300px;margin:0 auto}
-  .market{grid-template-columns:1fr;gap:30px}
-  .meal{grid-template-columns:1fr;gap:4px}
-  .padd{grid-template-columns:1fr 60px 66px;}
-  .padd .btn{grid-column:1/-1}
-  .rtop{grid-template-columns:96px 1fr;gap:16px;padding:20px}
-  .rtop .thumb{width:96px}
-  .rbody,.dfoot{padding-left:20px;padding-right:20px}
+  .hero{grid-template-columns:1fr;gap:22px;padding:22px;border-radius:24px}
+  .plateBox{max-width:220px;margin:0 auto}
+  .market{grid-template-columns:1fr}
+  .bar .wrap{gap:9px}
+  .bar .date{display:none}
+  .rtop{grid-template-columns:88px 1fr;padding:18px}
+  .rtop .thumb{width:88px}
 }
-@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-@media print{.controls,.plan,.cards,.tools,footer,.spread,.filters,.pantry{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{.bar,.hero,.plan,.cards,.filters,.tools,footer,.pantry{display:none}
+  body{background:#fff;color:#000}.card-pane{border:1px solid #000}}
 </style>
 </head>
 <body>
 
-<header class="wrap masthead">
-  <h1>The Daily Kitchen</h1>
-  <div class="issue">
-    <span id="issueDate"></span>
-    <span>Vegetarian · North Indian, with Southern mornings</span>
-    <span id="issueNo"></span>
+<div class="bar"><div class="wrap">
+  <div class="logo"><i>🍲</i>The Daily Kitchen</div>
+  <span class="date" id="issueDate"></span>
+  <span class="spacer"></span>
+  <div class="pill">Log
+    <div class="step"><button id="sDn" aria-label="Kam">–</button><span id="sVal">2</span><button id="sUp" aria-label="Zyada">+</button></div>
   </div>
-</header>
-
-<div class="wrap">
-  <div class="controls">
-    <div class="ctl"><span>Khaane wale</span>
-      <div class="step"><button id="sDn" aria-label="Kam karo">–</button><span id="sVal">4</span><button id="sUp" aria-label="Zyada karo">+</button></div>
-    </div>
-    <div class="ctl"><label for="modeSel">Aaj ka din</label>
-      <select id="modeSel">
-        <option value="aam">Aam din</option><option value="vrat">Vrat</option>
-        <option value="tyohar">Tyohar</option><option value="mehman">Mehmaan</option>
-      </select>
-    </div>
-    <div class="ctl" style="margin-left:auto"><button class="btn sm" id="reshuffle">Naya menu banao</button></div>
-  </div>
-</div>
+  <select id="modeSel" aria-label="Aaj ka din">
+    <option value="aam">Aam din</option><option value="vrat">Vrat</option>
+    <option value="tyohar">Tyohar</option><option value="mehman">Mehmaan</option>
+  </select>
+  <button class="ghost" id="reshuffle">Naya menu</button>
+</div></div>
 
 <main class="wrap">
 
-  <section class="spread">
+  <section class="hero">
     <div class="plateBox">
       <div class="plate" id="heroPlate"></div>
       <p class="caption" id="heroCap"></p>
     </div>
-    <div>
-      <p class="leadin" id="heroLead"></p>
+    <div class="heroTx">
+      <span class="leadin" id="heroLead"></span>
       <h2 id="heroTitle"></h2>
       <p class="deck" id="heroDeck"></p>
       <div class="meals" id="meals"></div>
+      <p class="caption" style="text-align:left;margin-top:12px" id="issueNo"></p>
     </div>
   </section>
 
@@ -231,24 +270,24 @@ footer{padding:40px 0 60px;border-top:3px double var(--rule);font-size:14px;colo
       <span class="badge" id="marketCount"></span>
     </div>
     <div class="market">
-      <div>
+      <div class="card-pane">
         <div class="buycols" id="buyList"></div>
         <div id="haveBox"></div>
         <div class="tools">
-          <button class="btn pom" id="copyList">List copy karo</button>
+          <button class="btn grad" id="copyList">List copy</button>
           <button class="btn" id="printList">Print</button>
-          <button class="btn" id="boughtAll">Sab khareed liya → pantry mein daalo</button>
+          <button class="btn mint" id="boughtAll">Khareed liya → stock mein</button>
         </div>
       </div>
-      <aside class="pantry">
+      <aside class="card-pane pantry">
         <h3>Ghar ka stock</h3>
-        <p class="note">Jo yahan likha hai, wo kal ki list se apne aap kat jayega.</p>
+        <p class="note">Jo yahan hai, wo kal ki list se apne aap kat jayega.</p>
         <div id="pantryList"></div>
         <div class="padd">
-          <div><input type="text" id="pItem" placeholder="Cheez ka naam" aria-label="Item"></div>
-          <div><input type="number" id="pQty" placeholder="Qty" step="0.25" min="0" aria-label="Quantity"></div>
-          <div><input type="text" id="pUnit" placeholder="Unit" aria-label="Unit"></div>
-          <button class="btn sm" id="pAdd">Daalo</button>
+          <input type="text" id="pItem" placeholder="Cheez" aria-label="Item">
+          <input type="number" id="pQty" placeholder="Qty" step="0.25" min="0" aria-label="Quantity">
+          <input type="text" id="pUnit" placeholder="Unit" aria-label="Unit">
+          <button class="btn sm mint" id="pAdd">Stock mein daalo</button>
         </div>
       </aside>
     </div>
@@ -256,15 +295,15 @@ footer{padding:40px 0 60px;border-top:3px double var(--rule);font-size:14px;colo
 
   <section class="blk">
     <div class="blkhead">
-      <div><h2>Aage ke do hafte</h2><p>Har dish badal sakte ho. Jo dish bach jaye, uspar "bacha hai" tick karo — agle din wahi dobara plan mein aa jayegi aur uska saaman list se hat jayega.</p></div>
+      <div><h2>Aage ke do hafte</h2><p>Side mein scroll karo. Koi bhi dish badal sakte ho — aur jo bach jaye uspar tick karo, agle din wahi plan mein aa jayegi aur uska saaman list se hat jayega.</p></div>
     </div>
     <div class="plan" id="plan"></div>
   </section>
 
   <section class="blk">
     <div class="blkhead">
-      <div><h2>Recipe index</h2><p>Har recipe poori vidhi ke saath — aur quantity aapke logon ke hisaab se apne aap adjust hoti hai.</p></div>
-      <input type="search" id="q" placeholder="Dhoondo…" aria-label="Search recipes">
+      <div><h2>Recipe index</h2><p>Quantity aapke logon ke hisaab se apne aap adjust hoti hai — steps ke andar bhi.</p></div>
+      <input type="search" id="q" placeholder="Dhoondo…" aria-label="Search recipes" style="max-width:230px">
     </div>
     <div class="filters" id="filters">
       <button class="fchip" data-f="all" aria-pressed="true">Sab</button>
@@ -279,11 +318,11 @@ footer{padding:40px 0 60px;border-top:3px double var(--rule);font-size:14px;colo
   </section>
 
   <footer>
-    <p>Recipes is site ke liye likhi gayi hain. Inhi dishes ke doosre versions dekhne ke liye
+    <p>Recipes is site ke liye likhi gayi hain. Doosre versions ke liye
     <a href="https://www.tarladalal.com" target="_blank" rel="noopener">Tarla Dalal</a>,
-    <a href="https://nishamadhulika.com" target="_blank" rel="noopener">Nisha Madhulika</a> aur
-    <a href="https://www.sanjeevkapoor.com" target="_blank" rel="noopener">Sanjeev Kapoor</a> dekhein.</p>
-    <p>Apni photo lagani ho to repo mein <code>img/&lt;recipe-key&gt;.jpg</code> daal do — plate apne aap use kar legi.</p>
+    <a href="https://nishamadhulika.com" target="_blank" rel="noopener">Nisha Madhulika</a>,
+    <a href="https://www.sanjeevkapoor.com" target="_blank" rel="noopener">Sanjeev Kapoor</a>.</p>
+    <p>Apni photo lagani ho to repo mein <code>img/&lt;recipe-key&gt;.jpg</code> daal do.</p>
   </footer>
 </main>
 
@@ -291,16 +330,17 @@ footer{padding:40px 0 60px;border-top:3px double var(--rule);font-size:14px;colo
   <div class="rtop"><div class="thumb" id="rThumb"></div>
     <div><h3 id="rTitle"></h3><div class="rm" id="rMeta"></div></div></div>
   <div class="rbody" id="rBody"></div>
-  <div class="dfoot"><button class="btn sm" id="rCopy">Saamagri copy</button><button class="btn sm pom" id="rClose">Band karo</button></div>
+  <div class="dfoot"><button class="btn sm" id="rCopy">Saamagri copy</button><button class="btn sm grad" id="rClose">Band karo</button></div>
 </dialog>
 
 <dialog id="swapDlg" aria-labelledby="swTitle">
   <div class="dhead"><h3 id="swTitle">Dish badlo</h3><p id="swSub"></p></div>
   <div class="swaplist" id="swapList"></div>
-  <div class="dfoot"><button class="btn sm" id="swReset">Auto par wapas</button><button class="btn sm pom" id="swClose">Band karo</button></div>
+  <div class="dfoot"><button class="btn sm" id="swReset">Auto par wapas</button><button class="btn sm grad" id="swClose">Band karo</button></div>
 </dialog>
 
 <script>
+
 const R = {
 
 /* ---------------- BREAKFAST ---------------- */
@@ -1009,7 +1049,7 @@ const store={
   set(k,v){mem[k]=v;try{localStorage.setItem("tdk:"+k,JSON.stringify(v));}catch{}}
 };
 
-let SERVES=store.get("serves",4);
+let SERVES=store.get("serves",2);
 let SALT=store.get("salt",0);
 let PANTRY=store.get("pantry",[]);
 let OVER=store.get("over",{});      // iso -> {b,l,d}
@@ -1060,6 +1100,11 @@ const allOf=p=>[...p.b,...p.l,...p.d];
 const round=x=>{const v=Math.round(x*100)/100;return v%1===0?v:(Math.round(x*4)/4);};
 function scaled(r){const f=SERVES/r.serves;
   return r.ing.map(([i,q,u,c])=>[i,q===null?null:round(q*f),u,c]);}
+const UNITRX=/(\d+(?:[.,]\d+)?)\s*(cups?|tbsp|tsp|ml|litre|liter|kg|g)\b/gi;
+function scaleText(txt,f){
+  if(Math.abs(f-1)<0.01)return txt;
+  return txt.replace(UNITRX,(m,n,u)=>`<span class="sc" title="mool nuskhe mein ${m.trim()}">${round(parseFloat(n.replace(",","."))*f)} ${u}</span>`);
+}
 function needList(p){
   const skip=new Set(p.carry||[]);
   const map={};
@@ -1085,7 +1130,7 @@ function applyPantry(list){
 const qtxt=it=>it.q?`${it.q} ${it.u}`.trim():"zaroorat bhar";
 
 /* ---------- plate art ---------- */
-const PAL={north:["#9E2B2B","#C08114","#7A6A3A"],south:["#55632C","#C08114","#8A8F5B"],basic:["#2E4057","#7E8AA2","#C08114"],vrat:["#6B7F4B","#C9B072","#4E5D3A"],tyohar:["#9E2B2B","#C08114","#6B2E5B"]};
+const PAL={north:["#FF5A5F","#FFC145","#FF8A3D"],south:["#24D6A5","#9BE564","#3BA9FF"],basic:["#3BA9FF","#8B6BFF","#FFC145"],vrat:["#9BE564","#FFD98E","#24D6A5"],tyohar:["#8B6BFF","#FFC145","#FF5A5F"]};
 function plateSVG(k){
   const r=R[k]||{tag:"basic",n:""},pal=PAL[r.tag]||PAL.basic,rn=rng(k.split("").reduce((a,c)=>a+c.charCodeAt(0),11));
   let blobs="";const cnt=3+Math.floor(rn()*3);
@@ -1094,10 +1139,10 @@ function plateSVG(k){
     blobs+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${rr.toFixed(1)}" fill="${pal[i%pal.length]}" opacity="${(.55+rn()*.35).toFixed(2)}"/>`;
   }
   return `<svg viewBox="0 0 100 100" width="100%" height="100%" role="img" aria-label="${r.n}" style="display:block">
-    <circle cx="50" cy="50" r="50" fill="#F2EADF"/><circle cx="50" cy="50" r="41" fill="#FBF6EF" stroke="rgba(34,30,26,.18)"/>
+    <circle cx="50" cy="50" r="50" fill="#232A44"/><circle cx="50" cy="50" r="41" fill="#1A2036" stroke="rgba(255,255,255,.12)"/>
     <g clip-path="url(#c${k.replace(/[^a-z]/g,"")})">${blobs}</g>
     <defs><clipPath id="c${k.replace(/[^a-z]/g,"")}"><circle cx="50" cy="50" r="38"/></clipPath></defs>
-    <circle cx="50" cy="50" r="49" fill="none" stroke="rgba(34,30,26,.28)"/></svg>`;
+    <circle cx="50" cy="50" r="49" fill="none" stroke="rgba(255,255,255,.16)"/></svg>`;
 }
 function plate(k){return `<img src="img/${k}.jpg" alt="${R[k].n}" loading="lazy" onerror="this.outerHTML=plateSVG('${k}')">`;}
 
@@ -1105,7 +1150,7 @@ function plate(k){return `<img src="img/${k}.jpg" alt="${R[k].n}" loading="lazy"
 const today=new Date();today.setHours(0,0,0,0);
 const tom=new Date(today.getTime()+864e5);
 document.getElementById("issueDate").textContent=fmtLong(today);
-document.getElementById("issueNo").textContent="Ank "+(dayNo(today)%365+1);
+document.getElementById("issueNo").textContent="Din "+(dayNo(today)%365+1)+" · menu apne aap roz badalta hai";
 
 const SLOTLBL={b:"Subah ka nashta",l:"Dopahar ka khana",d:"Raat ka khana"};
 const SLOTTIME={b:"7:30 – 9:00",l:"1:00 – 2:00",d:"8:00 – 9:30"};
@@ -1200,14 +1245,14 @@ function openRec(k){
   const r=R[k];CUR=k;
   document.getElementById("rThumb").innerHTML=plate(k);
   document.getElementById("rTitle").textContent=r.n;
-  document.getElementById("rMeta").textContent=`${r.time} · ${SERVES} logon ke liye${r.serves!==SERVES?` (mool nuskha ${r.serves} ka)`:""}`;
+  document.getElementById("rMeta").textContent=`${r.time} · ${SERVES} logon ke liye${r.serves!==SERVES?` · mool nuskha ${r.serves} ka tha, quantity apne aap badli hai`:""}`;
   const sc=scaled(r),own=i=>PANTRY.some(p=>p.i.toLowerCase()===i.toLowerCase());
   document.getElementById("rBody").innerHTML=`
     <h4>Saamagri</h4>
     <table class="ing"><tbody>${sc.map(([i,q,u])=>
       `<tr class="${own(i)?"own":""}"><td>${i}${own(i)?" · ghar par hai":""}</td><td>${q===null?"swaad anusaar":`${q} ${u}`.trim()}</td></tr>`).join("")}</tbody></table>
-    <h4>Vidhi</h4><ol class="steps">${r.steps.map(s=>`<li>${s}</li>`).join("")}</ol>
-    ${r.tips?`<h4>Dhyan rakho</h4><div class="tips"><ul>${r.tips.map(t=>`<li>${t}</li>`).join("")}</ul></div>`:""}
+    <h4>Vidhi</h4><ol class="steps">${r.steps.map(s=>`<li>${scaleText(s,SERVES/r.serves)}</li>`).join("")}</ol>
+    ${r.tips?`<h4>Dhyan rakho</h4><div class="tips"><ul>${r.tips.map(t=>`<li>${scaleText(t,SERVES/r.serves)}</li>`).join("")}</ul></div>`:""}
     <p class="refs">Doosre versions:
       <a href="https://www.tarladalal.com/search?q=${encodeURIComponent(r.n)}" target="_blank" rel="noopener">Tarla Dalal</a> ·
       <a href="https://nishamadhulika.com/?s=${encodeURIComponent(r.n)}" target="_blank" rel="noopener">Nisha Madhulika</a> ·
