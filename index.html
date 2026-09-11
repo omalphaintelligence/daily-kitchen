@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0B0E1A">
 <title>The Daily Kitchen</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kitchen">
 <meta name="description" content="Daily veg menus, pantry-aware shopping lists and fully detailed recipes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -246,6 +252,7 @@ code{background:var(--panel2);padding:2px 7px;border-radius:7px;font-size:12.5px
     <option value="tyohar">Tyohar</option><option value="mehman">Mehmaan</option>
   </select>
   <button class="ghost" id="reshuffle">Naya menu</button>
+  <button class="btn sm grad" id="installBtn" hidden>App install karo</button>
 </div></div>
 
 <main class="wrap">
@@ -1356,6 +1363,18 @@ document.getElementById("filters").onclick=e=>{
   document.querySelectorAll(".fchip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderCards();
 };
 [recDlg,swapDlg].forEach(d=>d.addEventListener("click",e=>{if(e.target===d)d.close();}));
+
+/* ---------- app install + offline ---------- */
+if("serviceWorker" in navigator)
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+let deferredPrompt=null;
+const iBtn=document.getElementById("installBtn");
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;iBtn.hidden=false;});
+iBtn.onclick=async()=>{
+  if(!deferredPrompt){alert("iPhone par: Safari mein Share (\u2191) dabao \u2192 'Add to Home Screen'.");return;}
+  deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;iBtn.hidden=true;
+};
+window.addEventListener("appinstalled",()=>{iBtn.hidden=true;});
 
 function refresh(){renderToday();renderMarket();renderPlan();}
 refresh();renderPantry();renderCards();
