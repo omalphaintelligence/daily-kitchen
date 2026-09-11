@@ -1,1 +1,1 @@
-# -daily-kitchen
+# daily-kitchen
