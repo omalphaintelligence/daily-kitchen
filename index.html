@@ -73,6 +73,9 @@ select:focus-visible,button:focus-visible,input:focus-visible,a:focus-visible{ou
 .ghost{border:1px solid var(--line);background:var(--panel);color:var(--tx);border-radius:999px;
   padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s}
 .ghost:hover{background:var(--panel2);transform:translateY(-1px)}
+.sync{padding:6px 14px;font-size:12px;font-weight:700;color:var(--mut)}
+.sync.ok{color:var(--mint)}
+.sync.off{color:var(--chili)}
 #themeBtn{width:38px;height:38px;padding:0;border-radius:50%;font-size:16px;display:grid;place-items:center}
 
 /* hero */
@@ -302,6 +305,7 @@ code{background:var(--panel2);padding:2px 7px;border-radius:7px;font-size:12.5px
     <option value="aam">Aam din</option><option value="vrat">Vrat</option>
     <option value="tyohar">Tyohar</option><option value="mehman">Mehmaan</option>
   </select>
+  <span class="pill sync" id="syncDot">Sync…</span>
   <button class="ghost" id="themeBtn" aria-label="Theme badlo" title="Light / Dark">🌙</button>
   <button class="ghost" id="reshuffle">Naya menu</button>
   <button class="btn sm grad" id="installBtn" hidden>App install karo</button>
@@ -398,6 +402,17 @@ code{background:var(--panel2);padding:2px 7px;border-radius:7px;font-size:12.5px
 </dialog>
 
 <script>
+/* ====================================================================
+   SYNC SETTINGS — dono phone par same 3 values honi chahiye
+   Supabase → Settings → API se URL aur anon key copy karo.
+   HOUSE_ID koi bhi lamba secret shabd rakho (dono jagah same).
+   Khaali chhodoge to app sirf isi phone par kaam karegi.
+   ==================================================================== */
+const SYNC = {
+  url:   "https://eylifxuiniuqkpicunvl.supabase.co",
+  key:   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5bGlmeHVpbml1cWtwaWN1bnZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNzEwNDMsImV4cCI6MjEwNDc0NzA0M30.x8Zx8qYMH5lQONM-PhbnSdiXQqGKug_788BQ3rNhK4Q",
+  house: "om-ghar-7fk2q9"    // dono phone par bilkul same
+};
 
 const R = {
 
@@ -1102,9 +1117,11 @@ const MODENAME={aam:"",vrat:"Vrat",tyohar:"Tyohar",mehman:"Mehmaan"};
 
 /* ---------- storage (localStorage, memory fallback) ---------- */
 const mem={};
+const SYNCKEYS=["serves","salt","pantry","over","mode","left","ticks"];
 const store={
   get(k,d){try{const v=localStorage.getItem("tdk:"+k);return v?JSON.parse(v):(k in mem?mem[k]:d);}catch{return (k in mem)?mem[k]:d;}},
-  set(k,v){mem[k]=v;try{localStorage.setItem("tdk:"+k,JSON.stringify(v));}catch{}}
+  set(k,v){mem[k]=v;try{localStorage.setItem("tdk:"+k,JSON.stringify(v));}catch{}
+    if(SYNCKEYS.includes(k))schedulePush();}
 };
 
 let SERVES=store.get("serves",2);
@@ -1113,6 +1130,7 @@ let PANTRY=store.get("pantry",[]);
 let OVER=store.get("over",{});      // iso -> {b,l,d}
 let MODE=store.get("mode",{});      // iso -> mode
 let LEFT=store.get("left",{});      // iso -> [keys]
+let TICKS=store.get("ticks",{});    // iso -> [khareede hue item]
 
 /* ---------- dates & deterministic picking ---------- */
 const DAYS=["Ravivar","Somvar","Mangalvar","Budhvar","Guruvar","Shukravar","Shanivar"];
@@ -1251,7 +1269,7 @@ function renderMarket(){
     const items=buy.filter(i=>i.c===g).sort((a,b)=>a.i.localeCompare(b.i));
     if(!items.length)return "";
     return `<div class="grp"><h4>${GRPNAME[g]}</h4><ul>${items.map((it,i)=>
-      `<li><input type="checkbox" id="b-${g}-${i}"><label for="b-${g}-${i}">${it.i}${it.part?` <em style="color:var(--olive);font-size:13px">(${it.part})</em>`:""}</label><span class="q">${qtxt(it)}</span></li>`).join("")}</ul></div>`;
+      `<li><input type="checkbox" id="b-${g}-${i}" data-tick="${it.i.replace(/"/g,"&quot;")}"${(TICKS[iso(tom)]||[]).includes(it.i)?" checked":""}><label for="b-${g}-${i}">${it.i}${it.part?` <em style="color:var(--mint);font-size:13px">(${it.part})</em>`:""}</label><span class="q">${qtxt(it)}</span></li>`).join("")}</ul></div>`;
   }).join("")||`<p class="empty">Kal ke liye sab kuch ghar par hai.</p>`;
   document.getElementById("haveBox").innerHTML=have.length?
     `<div class="grp have"><h4>Ghar par hai — lene ki zaroorat nahi</h4><ul>${have.map(it=>
@@ -1361,6 +1379,10 @@ document.addEventListener("change",e=>{
   const m=e.target.closest("[data-mode]");
   if(m){const k=m.dataset.mode;if(m.value==="aam")delete MODE[k];else MODE[k]=m.value;
     delete OVER[k];store.set("mode",MODE);store.set("over",OVER);refresh();return;}
+  const tk=e.target.closest("[data-tick]");
+  if(tk){const k=iso(tom),set=new Set(TICKS[k]||[]);
+    tk.checked?set.add(tk.dataset.tick):set.delete(tk.dataset.tick);
+    TICKS[k]=[...set];if(!TICKS[k].length)delete TICKS[k];store.set("ticks",TICKS);return;}
   const l=e.target.closest("[data-left]");
   if(l){const k=l.dataset.left,set=new Set(LEFT[k]||[]);
     l.checked?set.add(l.value):set.delete(l.value);
@@ -1414,6 +1436,59 @@ document.getElementById("filters").onclick=e=>{
   document.querySelectorAll(".fchip").forEach(x=>x.setAttribute("aria-pressed",x===b));renderCards();
 };
 [recDlg,swapDlg].forEach(d=>d.addEventListener("click",e=>{if(e.target===d)d.close();}));
+
+/* ---------- cloud sync (dono phone) ---------- */
+const sEl=document.getElementById("syncDot");
+let REV=store.get("rev",null), pushT=null, pulling=false;
+const ON = !!(SYNC.url && SYNC.key && SYNC.house);
+function sStat(t,cls){if(sEl){sEl.textContent=t;sEl.className="pill sync "+(cls||"");}}
+const H=()=>({apikey:SYNC.key,Authorization:"Bearer "+SYNC.key,"Content-Type":"application/json"});
+
+function snapshot(){return {serves:SERVES,salt:SALT,pantry:PANTRY,over:OVER,mode:MODE,left:LEFT,ticks:TICKS};}
+function apply(d){
+  if(!d)return;
+  SERVES=d.serves??SERVES; SALT=d.salt??SALT;
+  PANTRY=d.pantry||[]; OVER=d.over||{}; MODE=d.mode||{}; LEFT=d.left||{}; TICKS=d.ticks||{};
+  ["serves","salt","pantry","over","mode","left","ticks"].forEach(k=>{
+    try{localStorage.setItem("tdk:"+k,JSON.stringify(snapshot()[k]));}catch{}});
+  document.getElementById("sVal").textContent=SERVES;
+  refresh();renderPantry();
+}
+async function pull(){
+  if(!ON||pulling)return;pulling=true;
+  try{
+    const r=await fetch(`${SYNC.url}/rest/v1/kitchen_state?house_id=eq.${encodeURIComponent(SYNC.house)}&select=data,updated_at`,{headers:H()});
+    const rows=await r.json();
+    if(Array.isArray(rows)&&rows[0]){
+      if(rows[0].updated_at!==REV){REV=rows[0].updated_at;store.get("rev");
+        try{localStorage.setItem("tdk:rev",JSON.stringify(REV));}catch{}
+        apply(rows[0].data);}
+      sStat("Sync ✓","ok");
+    }else{await push();}
+  }catch{sStat("Offline","off");}
+  pulling=false;
+}
+async function push(){
+  if(!ON)return;
+  sStat("Sync…","");
+  try{
+    const r=await fetch(`${SYNC.url}/rest/v1/kitchen_state?on_conflict=house_id`,{
+      method:"POST",headers:{...H(),Prefer:"resolution=merge-duplicates,return=representation"},
+      body:JSON.stringify([{house_id:SYNC.house,data:snapshot(),updated_at:new Date().toISOString()}])});
+    const rows=await r.json();
+    if(Array.isArray(rows)&&rows[0]){REV=rows[0].updated_at;
+      try{localStorage.setItem("tdk:rev",JSON.stringify(REV));}catch{}}
+    sStat("Sync ✓","ok");
+  }catch{sStat("Offline","off");}
+}
+function schedulePush(){if(!ON)return;clearTimeout(pushT);pushT=setTimeout(push,700);}
+if(ON){
+  sStat("Sync…","");
+  pull();
+  setInterval(pull,8000);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)pull();});
+  window.addEventListener("online",pull);
+}else if(sEl){sEl.hidden=true;}
 
 /* ---------- theme ---------- */
 const tBtn=document.getElementById("themeBtn");
