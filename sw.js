@@ -1,4 +1,4 @@
-const CACHE = "tdk-v5";
+const CACHE = "tdk-v7";
 const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
