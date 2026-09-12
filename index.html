@@ -381,7 +381,6 @@ code{background:var(--panel2);padding:2px 7px;border-radius:7px;font-size:12.5px
     <a href="https://www.tarladalal.com" target="_blank" rel="noopener">Tarla Dalal</a>,
     <a href="https://nishamadhulika.com" target="_blank" rel="noopener">Nisha Madhulika</a>,
     <a href="https://www.sanjeevkapoor.com" target="_blank" rel="noopener">Sanjeev Kapoor</a>.</p>
-    
   </footer>
 </main>
 
@@ -1430,7 +1429,13 @@ tBtn.onclick=()=>setTheme(document.documentElement.getAttribute("data-theme")===
 
 /* ---------- app install + offline ---------- */
 if("serviceWorker" in navigator)
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker
+    .register("./sw.js",{updateViaCache:"none"})
+    .then(reg=>{reg.update();
+      reg.addEventListener("updatefound",()=>{const w=reg.installing;
+        w&&w.addEventListener("statechange",()=>{
+          if(w.state==="installed"&&navigator.serviceWorker.controller)location.reload();});});})
+    .catch(()=>{}));
 let deferredPrompt=null;
 const iBtn=document.getElementById("installBtn");
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredPrompt=e;iBtn.hidden=false;});
